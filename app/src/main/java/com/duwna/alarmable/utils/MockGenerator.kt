@@ -1,6 +1,6 @@
 package com.duwna.alarmable.utils
 
-import com.duwna.alarmable.entities.Alarm
+import com.duwna.alarmable.database.Alarm
 import java.util.*
 
 object MockGenerator {
@@ -11,10 +11,10 @@ object MockGenerator {
         }
     }
 
-    private fun generateAlarm(): Alarm {
+    fun generateAlarm(): Alarm {
         val r = Random()
         return Alarm(
-            r.nextInt(),
+            0,
             (0..1440).random(),
             r.nextBoolean(),
             "По умолчанию",

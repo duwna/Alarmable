@@ -9,13 +9,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duwna.alarmable.R
-import com.duwna.alarmable.entities.Alarm
+import com.duwna.alarmable.database.Alarm
 import com.duwna.alarmable.utils.*
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_alarm.view.*
 
 
-class AlarmAdapter() :
+class AlarmAdapter(
+    private val listener: AlarmClickListener
+) :
     ListAdapter<Alarm, AlarmViewHolder>(AlarmsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
@@ -25,9 +27,10 @@ class AlarmAdapter() :
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val alarm = getItem(position)
+        holder.bind(alarm)
+        holder.setListeners(alarm, listener)
     }
-
 }
 
 class AlarmsDiffCallback : DiffUtil.ItemCallback<Alarm>() {
@@ -38,36 +41,56 @@ class AlarmsDiffCallback : DiffUtil.ItemCallback<Alarm>() {
     override fun areContentsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
         return oldItem == newItem
     }
+
+    override fun getChangePayload(oldItem: Alarm, newItem: Alarm): Any? {
+        return true
+    }
 }
 
 class AlarmViewHolder(
     override val containerView: View
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(
-        item: Alarm
-    ) = itemView.run {
 
-        tv_time.text = item.time.toTimeString()
+    fun bind(alarm: Alarm) = itemView.run {
+
+        tv_time.text = alarm.time.toTimeString()
         tv_days.text = buildDaysString(
-            item.onMon, item.onTue, item.onWed, item.onThu, item.onFri, item.onSat, item.onSun
+            alarm.onMon,
+            alarm.onTue,
+            alarm.onWed,
+            alarm.onThu,
+            alarm.onFri,
+            alarm.onSat,
+            alarm.onSun
         )
-        tv_melody.text = item.melody
-
-        checkbox_has_task.isChecked = item.hasTask
-        switch_active.isChecked = item.isActive
-
-        tv_monday.setDayChecked(item.onMon)
-        tv_tuesday.setDayChecked(item.onTue)
-        tv_wednesday.setDayChecked(item.onWed)
-        tv_thursday.setDayChecked(item.onThu)
-        tv_friday.setDayChecked(item.onFri)
-        tv_saturday.setDayChecked(item.onSat)
-        tv_sunday.setDayChecked(item.onSun)
-
+        tv_melody.text = alarm.melody
+        checkbox_has_task.isChecked = alarm.hasTask
+        switch_active.isChecked = alarm.isActive
+        tv_monday.setDayChecked(alarm.onMon)
+        tv_tuesday.setDayChecked(alarm.onTue)
+        tv_wednesday.setDayChecked(alarm.onWed)
+        tv_thursday.setDayChecked(alarm.onThu)
+        tv_friday.setDayChecked(alarm.onFri)
+        tv_saturday.setDayChecked(alarm.onSat)
+        tv_sunday.setDayChecked(alarm.onSun)
         cardview.setOnClickListener {
             if (!expandable_container.isVisible) expand(expandable_container)
             else collapse(expandable_container)
         }
+    }
+
+    fun setListeners(alarm: Alarm, listener: AlarmClickListener) = itemView.run {
+        switch_active.setOnClickListener { listener.onSwitchClicked(alarm) }
+        tv_label_melody.setOnClickListener { listener.onMelodyClicked(alarm) }
+        checkbox_has_task.setOnClickListener { listener.onTaskClicked(alarm) }
+        tv_label_delete.setOnClickListener { listener.onDeleteClicked(alarm) }
+        tv_monday.setOnClickListener { listener.onMonClicked(alarm) }
+        tv_tuesday.setOnClickListener { listener.onTueClicked(alarm) }
+        tv_wednesday.setOnClickListener { listener.onWedClicked(alarm) }
+        tv_thursday.setOnClickListener { listener.onThuClicked(alarm) }
+        tv_friday.setOnClickListener { listener.onFriClicked(alarm) }
+        tv_saturday.setOnClickListener { listener.onSatClicked(alarm) }
+        tv_sunday.setOnClickListener { listener.onSunClicked(alarm) }
     }
 
 
@@ -82,3 +105,17 @@ class AlarmViewHolder(
         )
     }
 }
+
+class AlarmClickListener(
+    val onSwitchClicked: (Alarm) -> Unit,
+    val onMelodyClicked: (Alarm) -> Unit,
+    val onTaskClicked: (Alarm) -> Unit,
+    val onDeleteClicked: (Alarm) -> Unit,
+    val onMonClicked: (Alarm) -> Unit,
+    val onTueClicked: (Alarm) -> Unit,
+    val onWedClicked: (Alarm) -> Unit,
+    val onThuClicked: (Alarm) -> Unit,
+    val onFriClicked: (Alarm) -> Unit,
+    val onSatClicked: (Alarm) -> Unit,
+    val onSunClicked: (Alarm) -> Unit
+)

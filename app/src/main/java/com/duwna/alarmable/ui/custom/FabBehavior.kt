@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 
-class FabBehavior(context: Context, attributeSet: AttributeSet) :
+class FabBehavior(context: Context, attributeSet: AttributeSet? = null) :
     CoordinatorLayout.Behavior<ExtendedFloatingActionButton>(context, attributeSet) {
 
     override fun onStartNestedScroll(
