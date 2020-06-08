@@ -23,3 +23,30 @@ fun String.toInitials(): String = when {
 fun Double.format(digits: Int = 2) = "%.${digits}f".format(Locale.US, this)
 
 fun Double.equalsDelta(other: Double) = kotlin.math.abs(this / other - 1) < 0.01
+
+fun Int.toTimeString(): String {
+    val hours = this / 60
+    val minutes = this - hours * 60
+    val hoursStr = if (hours < 10) "0$hours" else "$hours"
+    val minutesStr = if (minutes < 10) "0$minutes" else "$minutes"
+    return "$hoursStr:$minutesStr"
+}
+
+fun buildDaysString(
+    onMon: Boolean,
+    onTue: Boolean,
+    onWed: Boolean,
+    onThu: Boolean,
+    onFri: Boolean,
+    onSat: Boolean,
+    onSun: Boolean
+): String = buildString {
+    if (onMon) append("ПН, ")
+    if (onTue) append("ВТ, ")
+    if (onWed) append("СР, ")
+    if (onThu) append("ЧТ, ")
+    if (onFri) append("ПТ, ")
+    if (onSat) append("СБ, ")
+    if (onSun) append("ВС, ")
+    if (isNotEmpty()) delete(length - 2, length - 1)
+}

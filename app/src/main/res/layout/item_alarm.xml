@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="12dp"
     android:layout_marginTop="6dp"
     android:layout_marginEnd="12dp"
@@ -11,50 +12,246 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-
     app:cardCornerRadius="4dp"
     app:cardElevation="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:background="?attr/colorSurface"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="36sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="02:15" />
+            android:background="?attr/colorSurface">
 
-        <TextView
-            android:id="@+id/tv_days"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="36sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="02:15" />
+
+
+            <TextView
+                android:id="@+id/tv_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="?attr/colorOnSurfaceDark"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_time"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="ПН, СР, ПТ" />
+
+            <Switch
+                android:id="@+id/switch_active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_days"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_time"
+                tools:checked="true" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_time"
-            tools:text="ПН, СР, ПТ" />
+            android:id="@+id/expandable_container"
+            android:background="?attr/colorSurface">
 
-        <Switch
-            tools:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/colorOnSurfaceDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_label_melody3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Задание:"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_task"
+                app:layout_constraintStart_toEndOf="@+id/iv_task"
+                app:layout_constraintTop_toTopOf="@+id/iv_task" />
+
+            <TextView
+                android:id="@+id/tv_label_melody4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Удалить"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_delete"
+                app:layout_constraintStart_toEndOf="@+id/iv_delete"
+                app:layout_constraintTop_toTopOf="@+id/iv_delete" />
+
+            <TextView
+                android:id="@+id/tv_label_melody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Мелодия:"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_melody"
+                app:layout_constraintStart_toEndOf="@+id/iv_melody"
+                app:layout_constraintTop_toTopOf="@+id/iv_melody" />
+
+            <TextView
+                android:id="@+id/tv_melody"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurfaceDark"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_label_melody"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_label_melody"
+                app:layout_constraintTop_toTopOf="@+id/tv_label_melody"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="По умолчанию" />
+
+
+            <TextView
+                android:id="@+id/tv_monday"
+                style="@style/tv_week_day"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="ПН"
+                app:layout_constraintEnd_toStartOf="@+id/tv_tuesday"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <TextView
+                android:id="@+id/tv_tuesday"
+                style="@style/tv_week_day"
+                android:text="ВТ"
+                app:layout_constraintEnd_toStartOf="@+id/tv_wednesday"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_monday"
+                app:layout_constraintTop_toTopOf="@+id/tv_monday" />
+
+            <TextView
+                android:id="@+id/tv_wednesday"
+                style="@style/tv_week_day"
+                android:text="СР"
+                app:layout_constraintEnd_toStartOf="@+id/tv_thursday"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_tuesday"
+                app:layout_constraintTop_toTopOf="@+id/tv_monday" />
+
+            <TextView
+                android:id="@+id/tv_thursday"
+                style="@style/tv_week_day"
+                android:text="ЧТ"
+                app:layout_constraintEnd_toStartOf="@+id/tv_friday"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_wednesday"
+                app:layout_constraintTop_toTopOf="@+id/tv_monday" />
+
+            <TextView
+                android:id="@+id/tv_friday"
+                style="@style/tv_week_day"
+                android:text="ПТ"
+                app:layout_constraintEnd_toStartOf="@+id/tv_saturday"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_thursday"
+                app:layout_constraintTop_toTopOf="@+id/tv_monday" />
+
+            <TextView
+                android:id="@+id/tv_saturday"
+                style="@style/tv_week_day"
+                android:text="СБ"
+                app:layout_constraintEnd_toStartOf="@+id/tv_sunday"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_friday"
+                app:layout_constraintTop_toTopOf="@+id/tv_monday" />
+
+            <TextView
+                android:id="@+id/tv_sunday"
+                style="@style/tv_week_day"
+                android:layout_marginEnd="16dp"
+                android:text="ВС"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_saturday"
+                app:layout_constraintTop_toTopOf="@+id/tv_monday" />
+
+            <ImageView
+                android:id="@+id/iv_melody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_monday"
+                app:srcCompat="@drawable/ic_music_note" />
+
+            <ImageView
+                android:id="@+id/iv_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_melody"
+                app:srcCompat="@drawable/ic_puzzle" />
+
+            <CheckBox
+                android:id="@+id/checkbox_has_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_label_melody3"
+                app:layout_constraintStart_toEndOf="@+id/tv_label_melody3"
+                app:layout_constraintTop_toTopOf="@+id/tv_label_melody3" />
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_task"
+                app:srcCompat="@drawable/ic_delete" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
