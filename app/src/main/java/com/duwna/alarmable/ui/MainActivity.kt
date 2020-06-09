@@ -1,6 +1,7 @@
 package com.duwna.alarmable.ui
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duwna.alarmable.R
+import com.duwna.alarmable.ui.adapters.AlarmAdapter
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViews() {
 
-        alarmAdapter = AlarmAdapter(viewModel.setListeners())
+        alarmAdapter =
+            AlarmAdapter(viewModel.setListeners())
 
         rv_bills.apply {
             layoutManager = LinearLayoutManager(context)
@@ -47,7 +50,11 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             showTimePickerDialog()
-//            viewModel.addAlarm()
+        }
+
+        fab.setOnLongClickListener {
+            startActivity(Intent(this, TaskActivity::class.java))
+            true
         }
     }
 

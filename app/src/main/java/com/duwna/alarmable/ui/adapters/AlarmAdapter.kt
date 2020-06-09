@@ -1,4 +1,4 @@
-package com.duwna.alarmable.ui
+package com.duwna.alarmable.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +18,9 @@ import kotlinx.android.synthetic.main.item_alarm.view.*
 class AlarmAdapter(
     private val listener: AlarmClickListener
 ) :
-    ListAdapter<Alarm, AlarmViewHolder>(AlarmsDiffCallback()) {
+    ListAdapter<Alarm, AlarmViewHolder>(
+        AlarmsDiffCallback()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val containerView =

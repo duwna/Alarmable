@@ -12,7 +12,7 @@ abstract class BaseViewModel: ViewModel() {
         notifications.postValue(Event(content))
     }
 
-    protected fun doAsync(block: suspend () -> Unit) {
+    protected fun runAsync(block: suspend () -> Unit) {
         viewModelScope.launch {
             try {
                 block()
