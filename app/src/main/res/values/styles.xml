@@ -3,7 +3,7 @@
     <attr name="colorOnSurfaceDark" format="color" />
     <attr name="colorBackground" format="color" />
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
@@ -12,6 +12,9 @@
         <item name="colorOnSurfaceDark">@color/color_on_surface_dark</item>
         <item name="colorOnPrimary">@color/color_on_primary</item>
         <item name="colorBackground">@color/color_background</item>
+
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColorHint">?attr/colorOnSurfaceDark</item>
     </style>
 
     <style name="tv_week_day">

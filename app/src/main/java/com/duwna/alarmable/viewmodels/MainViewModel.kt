@@ -2,7 +2,7 @@ package com.duwna.alarmable.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import com.duwna.alarmable.App
-import com.duwna.alarmable.database.Alarm
+import com.duwna.alarmable.database.alarm.Alarm
 import com.duwna.alarmable.ui.adapters.AlarmClickListener
 
 class MainViewModel : BaseViewModel() {

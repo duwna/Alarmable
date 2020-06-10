@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.text.Layout
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -55,6 +56,23 @@ fun Fragment.requestReadStoragePermission() {
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
             PERMISSION_REQUEST_CODE
         )
+    }
+}
+
+fun Layout.getLineBottomWithoutPadding(line: Int): Int {
+    var lineBottom = getLineBottomWithoutSpacing(line)
+    if (line == lineCount - 1) lineBottom -= bottomPadding
+    return lineBottom
+}
+
+fun Layout.getLineBottomWithoutSpacing(line: Int): Int {
+    val lineBottom = getLineBottom(line)
+    val isLastLine = line == lineCount - 1
+    val hasLineSpacing = spacingAdd != 0f
+    return if (!hasLineSpacing || isLastLine) {
+        lineBottom + spacingAdd.toInt()
+    } else {
+        lineBottom - spacingAdd.toInt()
     }
 }
 

@@ -1,6 +1,7 @@
-package com.duwna.alarmable.database
+package com.duwna.alarmable.database.alarm
 
 import androidx.room.*
+import com.duwna.alarmable.database.alarm.Alarm
 
 @Dao
 interface AlarmDao {

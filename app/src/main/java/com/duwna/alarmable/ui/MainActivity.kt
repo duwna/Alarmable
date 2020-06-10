@@ -3,19 +3,28 @@ package com.duwna.alarmable.ui
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.duwna.alarmable.App
 import com.duwna.alarmable.R
+import com.duwna.alarmable.database.recipe.Recipe
 import com.duwna.alarmable.ui.adapters.AlarmAdapter
+import com.duwna.alarmable.utils.log
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,8 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViews() {
 
-        alarmAdapter =
-            AlarmAdapter(viewModel.setListeners())
+        alarmAdapter = AlarmAdapter(viewModel.setListeners())
 
         rv_bills.apply {
             layoutManager = LinearLayoutManager(context)
@@ -51,20 +59,10 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             showTimePickerDialog()
         }
-
-        fab.setOnLongClickListener {
-            startActivity(Intent(this, TaskActivity::class.java))
-            true
-        }
     }
 
     private fun renderNotification(notify: Notify) {
-        val snackBar = Snackbar.make(container, notify.message, Snackbar.LENGTH_LONG)
-        when (notify) {
-            is Notify.ActionMessage ->
-                snackBar.setAction(notify.actionLabel) { notify.actionHandler.invoke() }
-        }
-        snackBar.show()
+        Snackbar.make(container, notify.message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun showTimePickerDialog() {
@@ -79,5 +77,25 @@ class MainActivity : AppCompatActivity() {
             calendar.get(Calendar.MINUTE),
             true
         ).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.task -> {
+                startActivity(Intent(this, TaskActivity::class.java))
+                true
+            }
+            R.id.info -> {
+                startActivity(Intent(this, InfoActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

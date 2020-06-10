@@ -1,4 +1,4 @@
-package com.duwna.alarmable.database
+package com.duwna.alarmable.database.alarm
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

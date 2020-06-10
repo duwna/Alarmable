@@ -65,7 +65,6 @@ class TaskActivity : AppCompatActivity() {
     private fun setupViews() {
 
         tv_count.setCharacterLists(TickerUtils.provideNumberList())
-        tv_task.setCharacterLists(TickerUtils.provideNumberList())
         tv_0.setCharacterLists(TickerUtils.provideNumberList())
         tv_1.setCharacterLists(TickerUtils.provideNumberList())
         tv_2.setCharacterLists(TickerUtils.provideNumberList())

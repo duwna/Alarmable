@@ -1,10 +1,9 @@
 package com.duwna.alarmable.viewmodels
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel: ViewModel() {
+abstract class BaseViewModel : ViewModel() {
 
     private val notifications = MutableLiveData<Event<Notify>>()
 
