@@ -29,6 +29,7 @@ class MainViewModel : BaseViewModel() {
         onMelodyClicked = { },
         onTaskClicked = { updateAlarm(it.copy(hasTask = !it.hasTask)) },
         onDeleteClicked = { deleteAlarm(it) },
+        onRepeatClicked = { updateAlarm(it.copy(isRepeating = !it.isRepeating)) },
         onMonClicked = { updateAlarm(it.copy(onMon = !it.onMon)) },
         onTueClicked = { updateAlarm(it.copy(onTue = !it.onTue)) },
         onWedClicked = { updateAlarm(it.copy(onWed = !it.onWed)) },

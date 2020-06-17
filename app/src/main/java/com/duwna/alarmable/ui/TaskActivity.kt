@@ -1,11 +1,14 @@
 package com.duwna.alarmable.ui
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.duwna.alarmable.R
+import com.duwna.alarmable.utils.format
 import com.google.android.material.snackbar.Snackbar
 import com.robinhood.ticker.TickerUtils
 import kotlinx.android.synthetic.main.activity_task.*
+import java.util.*
 
 class TaskActivity : AppCompatActivity() {
 
@@ -16,13 +19,17 @@ class TaskActivity : AppCompatActivity() {
 
     private var answers = BooleanArray(4)
 
+    lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm).apply { start() }
         setupViews()
         resumeQuiz()
     }
+
 
     private fun resumeQuiz() {
         if (tasksCount != tasksReady) {
@@ -85,6 +92,16 @@ class TaskActivity : AppCompatActivity() {
         btn_3.setOnClickListener {
             checkAnswer(answers[3])
         }
+
+        tv_time.text = Date().format("HH:mm")
+    }
+
+    override fun onBackPressed() {
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
     }
 }
 

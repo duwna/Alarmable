@@ -57,7 +57,7 @@ fun View.setPaddingOptionally(
     setPadding(left, top, right, bottom)
 }
 
-fun expand(v: View) {
+fun expand(v: View, duration: Long? = null) {
     val matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(
         (v.parent as View).width,
         View.MeasureSpec.EXACTLY
@@ -86,11 +86,11 @@ fun expand(v: View) {
     }
 
     // Expansion speed of 1dp/ms
-    a.duration = (targetHeight / v.context.resources.displayMetrics.density).toLong()
+    a.duration = duration ?: (targetHeight / v.context.resources.displayMetrics.density).toLong()
     v.startAnimation(a)
 }
 
-fun collapse(v: View) {
+fun collapse(v: View, duration: Long? = null) {
     val initialHeight = v.measuredHeight
     val a: Animation = object : Animation() {
         override fun applyTransformation(
@@ -112,6 +112,6 @@ fun collapse(v: View) {
     }
 
     // Collapse speed of 1dp/ms
-    a.duration = (initialHeight / v.context.resources.displayMetrics.density).toLong()
+    a.duration = duration ?: (initialHeight / v.context.resources.displayMetrics.density).toLong()
     v.startAnimation(a)
 }

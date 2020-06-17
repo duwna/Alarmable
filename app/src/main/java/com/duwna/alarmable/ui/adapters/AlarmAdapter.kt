@@ -56,18 +56,19 @@ class AlarmViewHolder(
     fun bind(alarm: Alarm) = itemView.run {
 
         tv_time.text = alarm.time.toTimeString()
-        tv_days.text = buildDaysString(
-            alarm.onMon,
-            alarm.onTue,
-            alarm.onWed,
-            alarm.onThu,
-            alarm.onFri,
-            alarm.onSat,
-            alarm.onSun
-        )
+
+        tv_days.text = if (alarm.isRepeating) buildDaysString(
+            alarm.onMon, alarm.onTue, alarm.onWed, alarm.onThu,
+            alarm.onFri, alarm.onSat, alarm.onSun
+        ) else alarm.time.toDayString()
+
         tv_melody.text = alarm.melody
         checkbox_has_task.isChecked = alarm.hasTask
         switch_active.isChecked = alarm.isActive
+
+        checkbox_repeat.isChecked = alarm.isRepeating
+        days_container.isVisible = alarm.isRepeating
+
         tv_monday.setDayChecked(alarm.onMon)
         tv_tuesday.setDayChecked(alarm.onTue)
         tv_wednesday.setDayChecked(alarm.onWed)
@@ -75,9 +76,10 @@ class AlarmViewHolder(
         tv_friday.setDayChecked(alarm.onFri)
         tv_saturday.setDayChecked(alarm.onSat)
         tv_sunday.setDayChecked(alarm.onSun)
+
         cardview.setOnClickListener {
-            if (!expandable_container.isVisible) expand(expandable_container)
-            else collapse(expandable_container)
+            if (!settings_container.isVisible) expand(settings_container)
+            else collapse(settings_container)
         }
     }
 
@@ -86,6 +88,7 @@ class AlarmViewHolder(
         tv_label_melody.setOnClickListener { listener.onMelodyClicked(alarm) }
         checkbox_has_task.setOnClickListener { listener.onTaskClicked(alarm) }
         tv_label_delete.setOnClickListener { listener.onDeleteClicked(alarm) }
+        checkbox_repeat.setOnClickListener { listener.onRepeatClicked(alarm) }
         tv_monday.setOnClickListener { listener.onMonClicked(alarm) }
         tv_tuesday.setOnClickListener { listener.onTueClicked(alarm) }
         tv_wednesday.setOnClickListener { listener.onWedClicked(alarm) }
@@ -113,6 +116,7 @@ class AlarmClickListener(
     val onMelodyClicked: (Alarm) -> Unit,
     val onTaskClicked: (Alarm) -> Unit,
     val onDeleteClicked: (Alarm) -> Unit,
+    val onRepeatClicked: (Alarm) -> Unit,
     val onMonClicked: (Alarm) -> Unit,
     val onTueClicked: (Alarm) -> Unit,
     val onWedClicked: (Alarm) -> Unit,

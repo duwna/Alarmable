@@ -12,7 +12,7 @@ interface RecipeDao {
     suspend fun getAll(): List<Recipe>
 
     @Query("SELECT * FROM recipe WHERE id IN (SELECT id FROM recipe ORDER BY RANDOM() LIMIT 1)")
-    suspend fun getRandom(): Recipe
+    suspend fun getRandom(): Recipe?
 
     @Update
     suspend fun update(recipe: Recipe)

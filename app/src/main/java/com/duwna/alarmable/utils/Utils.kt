@@ -32,6 +32,14 @@ fun Int.toTimeString(): String {
     return "$hoursStr:$minutesStr"
 }
 
+fun Int.toDayString(): String {
+    val calendar = Calendar.getInstance()
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    val minute = calendar.get(Calendar.MINUTE)
+    return if (hour * 60 + minute > this) "Завтра"
+    else "Сегодня"
+}
+
 fun buildDaysString(
     onMon: Boolean,
     onTue: Boolean,

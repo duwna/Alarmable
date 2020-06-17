@@ -10,6 +10,7 @@ data class Alarm(
     val isActive: Boolean,
     val melody: String,
     val hasTask: Boolean,
+    val isRepeating: Boolean = false,
     val onMon: Boolean = false,
     val onTue: Boolean = false,
     val onWed: Boolean = false,

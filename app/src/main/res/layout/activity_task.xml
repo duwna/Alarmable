@@ -36,6 +36,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="0/3" />
 
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="14:88" />
+
     <FrameLayout
         android:id="@+id/btn_2"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"

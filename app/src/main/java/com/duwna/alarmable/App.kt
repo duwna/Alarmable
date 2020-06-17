@@ -12,8 +12,7 @@ class App : Application() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-        database = Room.databaseBuilder(this, AlarmDatabase::class.java, "database")
-            .createFromAsset("database")
+        database = Room.databaseBuilder(this, AlarmDatabase::class.java, "AlarmDatabase")
             .build()
     }
 

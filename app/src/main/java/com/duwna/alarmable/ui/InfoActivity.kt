@@ -50,14 +50,9 @@ class InfoActivity : AppCompatActivity() {
         viewModel.observeNotifications(this) { renderNotification(it) }
 
         btn_other_recipe.setOnClickListener { viewModel.loadRecipe() }
-
-        log("INIT")
     }
 
     private fun bindRecipe(recipe: Recipe) {
-
-        log(recipe.url)
-
 
         tv_recipe_name.text = recipe.name
         tv_recipe_description.text = recipe.description

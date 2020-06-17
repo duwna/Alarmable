@@ -1,6 +1,10 @@
 package com.duwna.alarmable.ui
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -11,18 +15,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.duwna.alarmable.App
 import com.duwna.alarmable.R
-import com.duwna.alarmable.database.recipe.Recipe
 import com.duwna.alarmable.ui.adapters.AlarmAdapter
-import com.duwna.alarmable.utils.log
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         alarmAdapter = AlarmAdapter(viewModel.setListeners())
 
-        rv_bills.apply {
+        rv_alarms.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = alarmAdapter
         }
@@ -69,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         val listener = { _: TimePicker, hourOfDay: Int, minute: Int ->
             viewModel.addAlarm(hourOfDay, minute)
+            setAlarm(hourOfDay, minute)
         }
         TimePickerDialog(
             this,
@@ -77,6 +76,26 @@ class MainActivity : AppCompatActivity() {
             calendar.get(Calendar.MINUTE),
             true
         ).show()
+    }
+
+    private fun setAlarm(hourOfDay: Int, minute: Int) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val cal = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minute)
+        }
+        val intent = Intent(this@MainActivity, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this@MainActivity,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            cal.timeInMillis,
+            pendingIntent
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -97,5 +116,15 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+}
+
+class AlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        context?.startActivity(
+            Intent(
+                context.applicationContext,
+                TaskActivity::class.java
+            ).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK })
     }
 }
