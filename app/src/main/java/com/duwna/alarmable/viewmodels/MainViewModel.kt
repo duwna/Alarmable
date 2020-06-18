@@ -11,6 +11,9 @@ class MainViewModel : BaseViewModel() {
 
     val alarms = MutableLiveData<List<Alarm>>()
 
+    // while choosing melody
+    val tempAlarm = MutableLiveData<Alarm>()
+
     init {
         runAsync { loadAlarms() }
     }
@@ -26,7 +29,6 @@ class MainViewModel : BaseViewModel() {
 
     fun setListeners() = AlarmClickListener(
         onSwitchClicked = { updateAlarm(it.copy(isActive = !it.isActive)) },
-        onMelodyClicked = { },
         onTaskClicked = { updateAlarm(it.copy(hasTask = !it.hasTask)) },
         onDeleteClicked = { deleteAlarm(it) },
         onRepeatClicked = { updateAlarm(it.copy(isRepeating = !it.isRepeating)) },
@@ -38,6 +40,12 @@ class MainViewModel : BaseViewModel() {
         onSatClicked = { updateAlarm(it.copy(onSat = !it.onSat)) },
         onSunClicked = { updateAlarm(it.copy(onSun = !it.onSun)) }
     )
+
+    fun setMelody(name: String) {
+        if (tempAlarm.value != null) {
+            updateAlarm(tempAlarm.value!!.copy(melody = name))
+        }
+    }
 
     private fun deleteAlarm(alarm: Alarm) = runAsync {
         dao.delete(alarm)

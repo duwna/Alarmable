@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.item_alarm.view.*
 
 
 class AlarmAdapter(
-    private val listener: AlarmClickListener
+    private val listener: AlarmClickListener,
+    private val onMelodyClicked: (Alarm) -> Unit
 ) :
     ListAdapter<Alarm, AlarmViewHolder>(
         AlarmsDiffCallback()
@@ -31,7 +32,7 @@ class AlarmAdapter(
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
         val alarm = getItem(position)
         holder.bind(alarm)
-        holder.setListeners(alarm, listener)
+        holder.setListeners(alarm, listener, onMelodyClicked)
     }
 }
 
@@ -83,9 +84,12 @@ class AlarmViewHolder(
         }
     }
 
-    fun setListeners(alarm: Alarm, listener: AlarmClickListener) = itemView.run {
+    fun setListeners(
+        alarm: Alarm,
+        listener: AlarmClickListener,
+        onMelodyClicked: (Alarm) -> Unit
+    ) = itemView.run {
         switch_active.setOnClickListener { listener.onSwitchClicked(alarm) }
-        tv_label_melody.setOnClickListener { listener.onMelodyClicked(alarm) }
         checkbox_has_task.setOnClickListener { listener.onTaskClicked(alarm) }
         tv_label_delete.setOnClickListener { listener.onDeleteClicked(alarm) }
         checkbox_repeat.setOnClickListener { listener.onRepeatClicked(alarm) }
@@ -96,6 +100,7 @@ class AlarmViewHolder(
         tv_friday.setOnClickListener { listener.onFriClicked(alarm) }
         tv_saturday.setOnClickListener { listener.onSatClicked(alarm) }
         tv_sunday.setOnClickListener { listener.onSunClicked(alarm) }
+        tv_label_melody.setOnClickListener { onMelodyClicked(alarm) }
     }
 
 
@@ -113,7 +118,6 @@ class AlarmViewHolder(
 
 class AlarmClickListener(
     val onSwitchClicked: (Alarm) -> Unit,
-    val onMelodyClicked: (Alarm) -> Unit,
     val onTaskClicked: (Alarm) -> Unit,
     val onDeleteClicked: (Alarm) -> Unit,
     val onRepeatClicked: (Alarm) -> Unit,

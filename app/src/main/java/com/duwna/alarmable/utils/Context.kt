@@ -5,6 +5,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.database.Cursor
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.text.Layout
 import android.util.TypedValue
 import android.view.View
@@ -13,6 +16,7 @@ import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+
 
 fun Context.dpToPx(dp: Int): Float {
     return TypedValue.applyDimension(
@@ -74,6 +78,28 @@ fun Layout.getLineBottomWithoutSpacing(line: Int): Int {
     } else {
         lineBottom - spacingAdd.toInt()
     }
+}
+
+fun Context.getFileName(uri: Uri): String? {
+    var result: String? = null
+    if (uri.scheme.equals("content")) {
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        cursor.use { c ->
+            if (cursor != null && cursor.moveToFirst()) {
+                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+            }
+        }
+    }
+    if (result == null) {
+        result = uri.getPath()
+        val cut = result?.lastIndexOf('/')
+        if (cut != -1) {
+            if (cut != null) {
+                result = result?.substring(cut + 1)
+            }
+        }
+    }
+    return result
 }
 
 const val PERMISSION_REQUEST_CODE = 200
