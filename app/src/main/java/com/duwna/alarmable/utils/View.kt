@@ -76,7 +76,8 @@ fun expand(v: View, duration: Long? = null) {
             t: Transformation?
         ) {
             v.layoutParams.height =
-                if (interpolatedTime == 1f) LinearLayout.LayoutParams.WRAP_CONTENT else (targetHeight * interpolatedTime).toInt()
+                if (interpolatedTime == 1f) LinearLayout.LayoutParams.WRAP_CONTENT
+                else (targetHeight * interpolatedTime).toInt()
             v.requestLayout()
         }
 

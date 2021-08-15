@@ -19,17 +19,17 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
+import com.duwna.alarmable.databinding.ActivityMainBinding
 import com.duwna.alarmable.ui.adapters.AlarmAdapter
 import com.duwna.alarmable.utils.PERMISSION_REQUEST_CODE
 import com.duwna.alarmable.utils.PICK_MELODY_CODE
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
@@ -37,11 +37,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var alarmAdapter: AlarmAdapter
+    private val binding: ActivityMainBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         setupViews()
@@ -57,19 +58,20 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        rv_alarms.apply {
+        binding.rvAlarms.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = alarmAdapter
         }
 
-        viewModel.alarms.observe(this, Observer {
-            tv_no_alarms.isVisible = it.isEmpty()
+
+        viewModel.subscribeOnAlarmList(this) {
+            binding.tvNoAlarms.isVisible = it.isEmpty()
             alarmAdapter.submitList(it)
-        })
+        }
 
         viewModel.observeNotifications(this) { renderNotification(it) }
 
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             showTimePickerDialog()
         }
 
@@ -104,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderNotification(notify: Notify) {
-        Snackbar.make(container, notify.message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(binding.root, notify.message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun showTimePickerDialog() {
@@ -177,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         requestCode: Int,
         permissions: Array<String>, grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> {
                 if ((grantResults.isNotEmpty() &&
@@ -185,7 +188,7 @@ class MainActivity : AppCompatActivity() {
                     chooseMelody()
                 } else {
                     Snackbar.make(
-                        container,
+                        binding.root,
                         "Для выбора мелодии необходимо дать разрешение на чтение хранилища",
                         Snackbar.LENGTH_LONG
                     ).show()

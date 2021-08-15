@@ -11,7 +11,7 @@ abstract class BaseViewModel : ViewModel() {
         notifications.postValue(Event(content))
     }
 
-    protected fun runAsync(block: suspend () -> Unit) {
+    protected fun launchSafety(block: suspend () -> Unit) {
         viewModelScope.launch {
             try {
                 block()

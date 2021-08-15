@@ -49,20 +49,6 @@ fun Context.toast(msg: Any?, tag: String = this::class.java.simpleName) {
     Toast.makeText(this, msg.toString(), Toast.LENGTH_SHORT).show()
 }
 
-fun Fragment.requestReadStoragePermission() {
-    if (ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-        != PackageManager.PERMISSION_GRANTED
-    ) {
-        requestPermissions(
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            PERMISSION_REQUEST_CODE
-        )
-    }
-}
-
 fun Layout.getLineBottomWithoutPadding(line: Int): Int {
     var lineBottom = getLineBottomWithoutSpacing(line)
     if (line == lineCount - 1) lineBottom -= bottomPadding
@@ -78,28 +64,6 @@ fun Layout.getLineBottomWithoutSpacing(line: Int): Int {
     } else {
         lineBottom - spacingAdd.toInt()
     }
-}
-
-fun Context.getFileName(uri: Uri): String? {
-    var result: String? = null
-    if (uri.scheme.equals("content")) {
-        val cursor = contentResolver.query(uri, null, null, null, null)
-        cursor.use { c ->
-            if (cursor != null && cursor.moveToFirst()) {
-                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-            }
-        }
-    }
-    if (result == null) {
-        result = uri.getPath()
-        val cut = result?.lastIndexOf('/')
-        if (cut != -1) {
-            if (cut != null) {
-                result = result?.substring(cut + 1)
-            }
-        }
-    }
-    return result
 }
 
 const val PERMISSION_REQUEST_CODE = 200

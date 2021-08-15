@@ -20,20 +20,15 @@ class InfoViewModel : BaseViewModel() {
         loadRecipe()
     }
 
-    fun loadWeather(lat: Double, lon: Double) = runAsync {
+    fun loadWeather(lat: Double, lon: Double) = launchSafety {
 
-        val response = weatherApi
+        val weatherResponse = weatherApi
             .getWeatherByCoordsAsync(lat, lon, "ru", BuildConfig.OWM_API_KEY)
-            .await()
 
-        if (response.isSuccessful) {
-            weather.postValue(response.body())
-        } else {
-            notify(Notify.Error())
-        }
+        weather.postValue(weatherResponse)
     }
 
-    fun loadRecipe() = runAsync {
+    fun loadRecipe() = launchSafety {
         if (recipeDao.getRandom() == null) prePopulate()
         recipe.postValue(recipeDao.getRandom())
     }

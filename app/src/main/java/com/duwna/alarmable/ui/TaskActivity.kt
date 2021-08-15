@@ -3,14 +3,17 @@ package com.duwna.alarmable.ui
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
+import com.duwna.alarmable.databinding.ActivityTaskBinding
 import com.duwna.alarmable.utils.format
 import com.google.android.material.snackbar.Snackbar
 import com.robinhood.ticker.TickerUtils
-import kotlinx.android.synthetic.main.activity_task.*
 import java.util.*
 
 class TaskActivity : AppCompatActivity() {
+
+    private val binding: ActivityTaskBinding by viewBinding()
 
     private val maxNumber = 200
 
@@ -31,10 +34,10 @@ class TaskActivity : AppCompatActivity() {
     }
 
 
-    private fun resumeQuiz() {
+    private fun resumeQuiz() = with(binding) {
         if (tasksCount != tasksReady) {
 
-            tv_count.text = "$tasksReady/$tasksCount"
+            tvCount.text = "$tasksReady/$tasksCount"
 
             val firstNum = (0..maxNumber).random()
             val secondNum = (0..maxNumber).random()
@@ -45,12 +48,12 @@ class TaskActivity : AppCompatActivity() {
 
             val deltaRange = (-maxNumber / 2)..(maxNumber / 2)
 
-            tv_0.text = if (answers[0]) sum.toString() else (sum + (deltaRange).random()).toString()
-            tv_1.text = if (answers[1]) sum.toString() else (sum + (deltaRange).random()).toString()
-            tv_2.text = if (answers[2]) sum.toString() else (sum + (deltaRange).random()).toString()
-            tv_3.text = if (answers[3]) sum.toString() else (sum + (deltaRange).random()).toString()
+            tv0.text = if (answers[0]) sum.toString() else (sum + (deltaRange).random()).toString()
+            tv1.text = if (answers[1]) sum.toString() else (sum + (deltaRange).random()).toString()
+            tv2.text = if (answers[2]) sum.toString() else (sum + (deltaRange).random()).toString()
+            tv3.text = if (answers[3]) sum.toString() else (sum + (deltaRange).random()).toString()
 
-            tv_task.text = "$firstNum + $secondNum"
+            tvTask.text = "$firstNum + $secondNum"
         } else {
             finish()
         }
@@ -60,7 +63,7 @@ class TaskActivity : AppCompatActivity() {
         tasksReady++
         if (!isRight) {
             tasksCount += 2
-            Snackbar.make(container, "Неверно, +2 задачи!", Snackbar.LENGTH_SHORT).apply {
+            Snackbar.make(binding.root, "Неверно, +2 задачи!", Snackbar.LENGTH_SHORT).apply {
                 setBackgroundTint(getColor(R.color.design_default_color_error))
                 setTextColor(getColor(android.R.color.white))
                 show()
@@ -69,31 +72,31 @@ class TaskActivity : AppCompatActivity() {
         resumeQuiz()
     }
 
-    private fun setupViews() {
+    private fun setupViews() = with(binding) {
 
-        tv_count.setCharacterLists(TickerUtils.provideNumberList())
-        tv_0.setCharacterLists(TickerUtils.provideNumberList())
-        tv_1.setCharacterLists(TickerUtils.provideNumberList())
-        tv_2.setCharacterLists(TickerUtils.provideNumberList())
-        tv_3.setCharacterLists(TickerUtils.provideNumberList())
+        tvCount.setCharacterLists(TickerUtils.provideNumberList())
+        tv0.setCharacterLists(TickerUtils.provideNumberList())
+        tv1.setCharacterLists(TickerUtils.provideNumberList())
+        tv2.setCharacterLists(TickerUtils.provideNumberList())
+        tv3.setCharacterLists(TickerUtils.provideNumberList())
 
-        btn_0.setOnClickListener {
+        btn0.setOnClickListener {
             checkAnswer(answers[0])
         }
 
-        btn_1.setOnClickListener {
+        btn1.setOnClickListener {
             checkAnswer(answers[1])
         }
 
-        btn_2.setOnClickListener {
+        btn2.setOnClickListener {
             checkAnswer(answers[2])
         }
 
-        btn_3.setOnClickListener {
+        btn3.setOnClickListener {
             checkAnswer(answers[3])
         }
 
-        tv_time.text = Date().format("HH:mm")
+        tvTime.text = Date().format("HH:mm")
     }
 
     override fun onBackPressed() {
