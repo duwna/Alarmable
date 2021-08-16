@@ -1,7 +1,6 @@
 package com.duwna.alarmable.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -10,9 +9,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duwna.alarmable.R
 import com.duwna.alarmable.database.alarm.Alarm
+import com.duwna.alarmable.databinding.ItemAlarmBinding
 import com.duwna.alarmable.utils.*
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_alarm.view.*
 
 
 class AlarmAdapter(
@@ -24,9 +22,9 @@ class AlarmAdapter(
     ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
-        val containerView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_alarm, parent, false)
-        return AlarmViewHolder(containerView)
+        val binding =
+            ItemAlarmBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AlarmViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -51,36 +49,36 @@ class AlarmsDiffCallback : DiffUtil.ItemCallback<Alarm>() {
 }
 
 class AlarmViewHolder(
-    override val containerView: View
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    private val binding: ItemAlarmBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(alarm: Alarm) = itemView.run {
+    fun bind(alarm: Alarm) = with(binding) {
 
-        tv_time.text = alarm.time.toTimeString()
+        tvTime.text = alarm.time.toTimeString()
 
-        tv_days.text = if (alarm.isRepeating) buildDaysString(
+        tvDays.text = if (alarm.isRepeating) buildDaysString(
             alarm.onMon, alarm.onTue, alarm.onWed, alarm.onThu,
             alarm.onFri, alarm.onSat, alarm.onSun
         ) else alarm.time.toDayString()
 
-        tv_melody.text = alarm.melody
-        checkbox_has_task.isChecked = alarm.hasTask
-        switch_active.isChecked = alarm.isActive
+        tvMelody.text = alarm.melody
+        checkboxHasTask.isChecked = alarm.hasTask
+        switchActive.isChecked = alarm.isActive
 
-        checkbox_repeat.isChecked = alarm.isRepeating
-        days_container.isVisible = alarm.isRepeating
+        checkboxRepeat.isChecked = alarm.isRepeating
+        daysContainer.isVisible = alarm.isRepeating
 
-        tv_monday.setDayChecked(alarm.onMon)
-        tv_tuesday.setDayChecked(alarm.onTue)
-        tv_wednesday.setDayChecked(alarm.onWed)
-        tv_thursday.setDayChecked(alarm.onThu)
-        tv_friday.setDayChecked(alarm.onFri)
-        tv_saturday.setDayChecked(alarm.onSat)
-        tv_sunday.setDayChecked(alarm.onSun)
+        tvMonday.setDayChecked(alarm.onMon)
+        tvTuesday.setDayChecked(alarm.onTue)
+        tvWednesday.setDayChecked(alarm.onWed)
+        tvThursday.setDayChecked(alarm.onThu)
+        tvFriday.setDayChecked(alarm.onFri)
+        tvSaturday.setDayChecked(alarm.onSat)
+        tvSunday.setDayChecked(alarm.onSun)
 
         cardview.setOnClickListener {
-            if (!settings_container.isVisible) expand(settings_container)
-            else collapse(settings_container)
+            if (!settingsContainer.isVisible) expand(settingsContainer)
+            else collapse(settingsContainer)
         }
     }
 
@@ -88,19 +86,19 @@ class AlarmViewHolder(
         alarm: Alarm,
         listener: AlarmClickListener,
         onMelodyClicked: (Alarm) -> Unit
-    ) = itemView.run {
-        switch_active.setOnClickListener { listener.onSwitchClicked(alarm) }
-        checkbox_has_task.setOnClickListener { listener.onTaskClicked(alarm) }
-        tv_label_delete.setOnClickListener { listener.onDeleteClicked(alarm) }
-        checkbox_repeat.setOnClickListener { listener.onRepeatClicked(alarm) }
-        tv_monday.setOnClickListener { listener.onMonClicked(alarm) }
-        tv_tuesday.setOnClickListener { listener.onTueClicked(alarm) }
-        tv_wednesday.setOnClickListener { listener.onWedClicked(alarm) }
-        tv_thursday.setOnClickListener { listener.onThuClicked(alarm) }
-        tv_friday.setOnClickListener { listener.onFriClicked(alarm) }
-        tv_saturday.setOnClickListener { listener.onSatClicked(alarm) }
-        tv_sunday.setOnClickListener { listener.onSunClicked(alarm) }
-        tv_label_melody.setOnClickListener { onMelodyClicked(alarm) }
+    ) = with(binding) {
+        switchActive.setOnClickListener { listener.onSwitchClicked(alarm) }
+        checkboxHasTask.setOnClickListener { listener.onTaskClicked(alarm) }
+        tvLabelDelete.setOnClickListener { listener.onDeleteClicked(alarm) }
+        checkboxRepeat.setOnClickListener { listener.onRepeatClicked(alarm) }
+        tvMonday.setOnClickListener { listener.onMonClicked(alarm) }
+        tvTuesday.setOnClickListener { listener.onTueClicked(alarm) }
+        tvWednesday.setOnClickListener { listener.onWedClicked(alarm) }
+        tvThursday.setOnClickListener { listener.onThuClicked(alarm) }
+        tvFriday.setOnClickListener { listener.onFriClicked(alarm) }
+        tvSaturday.setOnClickListener { listener.onSatClicked(alarm) }
+        tvSunday.setOnClickListener { listener.onSunClicked(alarm) }
+        tvLabelMelody.setOnClickListener { onMelodyClicked(alarm) }
     }
 
 

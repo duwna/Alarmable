@@ -1,37 +1,26 @@
 package com.duwna.alarmable.viewmodels
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import com.duwna.alarmable.App
 import com.duwna.alarmable.database.alarm.Alarm
+import com.duwna.alarmable.repositories.MainRepository
 import com.duwna.alarmable.ui.adapters.AlarmClickListener
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 
-class MainViewModel : BaseViewModel() {
+class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
 
-    private val dao = App.database.alarmDao()
-
-    val alarms = dao.alarmsFlow()
+    val alarms = repository.alarmsFlow()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     // while choosing melody
     val tempAlarm = MutableLiveData<Alarm>()
 
-    fun subscribeOnAlarmList(owner: LifecycleOwner, onChange: (List<Alarm>) -> Unit) {
-        dao.getAll().observe(owner, Observer(onChange))
-    }
-
-
     fun addAlarm(hourOfDay: Int, minute: Int) = launchSafety {
         val alarm = Alarm(
             0, hourOfDay * 60 + minute, true, "По умолчанию", false
         )
-        dao.insert(alarm)
+        repository.insert(alarm)
     }
 
 
@@ -56,11 +45,11 @@ class MainViewModel : BaseViewModel() {
     }
 
     private fun deleteAlarm(alarm: Alarm) = launchSafety {
-        dao.delete(alarm)
+        repository.delete(alarm)
     }
 
     private fun updateAlarm(alarm: Alarm) = launchSafety {
-        dao.update(alarm)
+        repository.update(alarm)
     }
 }
 

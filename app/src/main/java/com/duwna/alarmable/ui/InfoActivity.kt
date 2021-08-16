@@ -26,20 +26,20 @@ import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class InfoActivity : AppCompatActivity() {
+class InfoActivity : AppCompatActivity(R.layout.activity_info) {
+
+    private val binding: ActivityInfoBinding by viewBinding()
+    private val viewModel: InfoViewModel by viewModel()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var viewModel: InfoViewModel
-    private val binding: ActivityInfoBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(InfoViewModel::class.java)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         if (isPermitted()) loadLocation()
@@ -120,6 +120,7 @@ class InfoActivity : AppCompatActivity() {
                     "Не удалось получить последнее местоположение",
                     Snackbar.LENGTH_LONG
                 ).show()
+                viewModel.loadWeather(30.0, 60.0)
             }
         }
     }

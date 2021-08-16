@@ -19,7 +19,7 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
@@ -30,43 +30,50 @@ import com.duwna.alarmable.utils.PICK_MELODY_CODE
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private lateinit var viewModel: MainViewModel
-    private lateinit var alarmAdapter: AlarmAdapter
     private val binding: ActivityMainBinding by viewBinding()
+    private val viewModel: MainViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        setupViews()
-    }
-
-    private fun setupViews() {
-
-        alarmAdapter = AlarmAdapter(
+    private val alarmAdapter: AlarmAdapter by lazy {
+        AlarmAdapter(
             listener = viewModel.setListeners(),
             onMelodyClicked = { alarm ->
                 viewModel.tempAlarm.value = alarm
                 chooseMelody()
             }
         )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setSupportActionBar(binding.toolbar)
+        setupViews()
+        subscribeOnState()
+    }
+
+    private fun subscribeOnState() {
+
+        lifecycleScope.launch {
+            viewModel.alarms.collect { alarms ->
+                binding.tvNoAlarms.isVisible = alarms.isEmpty()
+                alarmAdapter.submitList(alarms)
+            }
+        }
+    }
+
+    private fun setupViews() {
 
         binding.rvAlarms.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = alarmAdapter
-        }
-
-
-        viewModel.subscribeOnAlarmList(this) {
-            binding.tvNoAlarms.isVisible = it.isEmpty()
-            alarmAdapter.submitList(it)
         }
 
         viewModel.observeNotifications(this) { renderNotification(it) }

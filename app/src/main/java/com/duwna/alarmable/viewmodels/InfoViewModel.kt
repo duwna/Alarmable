@@ -6,12 +6,11 @@ import com.duwna.alarmable.BuildConfig
 import com.duwna.alarmable.api.WeatherResponse
 import com.duwna.alarmable.api.WeatherService
 import com.duwna.alarmable.database.recipe.Recipe
+import com.duwna.alarmable.database.recipe.RecipeDao
+import com.duwna.alarmable.repositories.InfoRepository
 import com.duwna.alarmable.utils.MockGenerator
 
-class InfoViewModel : BaseViewModel() {
-
-    private val weatherApi = WeatherService.getApi()
-    private val recipeDao = App.database.recipeDao()
+class InfoViewModel(private  val repository: InfoRepository) : BaseViewModel() {
 
     val weather = MutableLiveData<WeatherResponse?>(null)
     val recipe = MutableLiveData<Recipe>()
@@ -22,19 +21,19 @@ class InfoViewModel : BaseViewModel() {
 
     fun loadWeather(lat: Double, lon: Double) = launchSafety {
 
-        val weatherResponse = weatherApi
-            .getWeatherByCoordsAsync(lat, lon, "ru", BuildConfig.OWM_API_KEY)
+        val weatherResponse = repository
+            .getWeatherByCoordsAsync(lat, lon, "ru")
 
         weather.postValue(weatherResponse)
     }
 
     fun loadRecipe() = launchSafety {
-        if (recipeDao.getRandom() == null) prePopulate()
-        recipe.postValue(recipeDao.getRandom())
+        if (repository.getRandom() == null) prePopulate()
+        recipe.postValue(repository.getRandom())
     }
 
     private suspend fun prePopulate() {
-        MockGenerator.recipes.forEach { recipeDao.insert(it) }
+        MockGenerator.recipes.forEach { repository.insert(it) }
     }
 
 }

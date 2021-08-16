@@ -2,8 +2,10 @@ package com.duwna.alarmable
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.room.Room
-import com.duwna.alarmable.database.AlarmDatabase
+import com.duwna.alarmable.di.appModule
+import com.duwna.alarmable.di.dbModule
+import com.duwna.alarmable.di.networkModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : Application() {
@@ -13,15 +15,9 @@ class App : Application() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-        database = Room.databaseBuilder(this, AlarmDatabase::class.java, "AlarmDatabase")
-            .build()
-
         startKoin {
-
+            androidContext(this@App)
+            modules(listOf(appModule, networkModule, dbModule))
         }
-    }
-
-    companion object {
-        lateinit var database: AlarmDatabase
     }
 }
