@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.receivers.AlarmReceiver
 import com.duwna.alarmable.utils.isNextDay
 import com.duwna.alarmable.utils.log
@@ -14,27 +15,26 @@ class AlarmsController(
     private val alarmManager: AlarmManager
 ) {
 
-    fun setAlarm(hour: Int, minute: Int, alarmId: Int) {
+    fun setAlarm(alarm: Alarm) {
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarmId,
+            alarm.id,
             Intent(context, AlarmReceiver::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-//        for testing
-//        val triggerTime = Calendar.getInstance().apply {
-//            add(Calendar.SECOND, 10)
-//        }.timeInMillis
+        val triggerTimeTest = Calendar.getInstance().apply {
+            add(Calendar.SECOND, 3)
+        }.timeInMillis
 
-        val triggerTime = getTriggerTimeMillis(hour, minute)
+        val triggerTime = getTriggerTimeMillis(alarm.hour, alarm.minute)
 
         log(Date(triggerTime))
 
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
-            triggerTime,
+            triggerTimeTest,
             pendingIntent
         )
     }

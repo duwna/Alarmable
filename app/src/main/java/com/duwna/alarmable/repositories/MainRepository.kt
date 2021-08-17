@@ -31,19 +31,20 @@ class MainRepository(
             onSun = false
         )
 
-        val alarmId = alarmsDao.insert(alarm)
-        alarmsController.setAlarm(hour, minute, alarmId.toInt())
+        val alarmId = alarmsDao.insert(alarm).toInt()
+        alarmsController.setAlarm(alarm.copy(id = alarmId))
     }
 
-    suspend fun update(newAlarm: Alarm) {
-        alarmsDao.update(newAlarm)
+    suspend fun update(alarm: Alarm) {
+        alarmsDao.update(alarm)
 
-        if (newAlarm.isActive) {
-//            val hour =
-//            createAlarm()
-        }
+        if (alarm.isActive) alarmsController.setAlarm(alarm)
+        else alarmsController.cancelAlarm(alarm.id)
     }
 
-    suspend fun delete(alarm: Alarm) = alarmsDao.delete(alarm)
+    suspend fun delete(alarm: Alarm) {
+        alarmsDao.delete(alarm)
+        alarmsController.cancelAlarm(alarm.id)
+    }
 }
 
