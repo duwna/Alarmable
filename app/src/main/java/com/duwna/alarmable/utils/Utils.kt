@@ -1,6 +1,7 @@
 package com.duwna.alarmable.utils
 
 import android.util.Log
+import com.duwna.alarmable.data.database.alarm.Alarm
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,42 +14,19 @@ fun Any.log(msg: Any?, tag: String = this::class.java.simpleName) {
     Log.e(tag, msg.toString())
 }
 
-fun String.toInitials(): String = when {
-    length >= 2 -> substring(0, 2).toUpperCase(Locale.US)
-    isNotBlank() -> substring(0, 1).toUpperCase(Locale.US)
-    else -> ""
+fun getTimeString(hour: Int, minute: Int): String = buildString {
+    if (hour < 10) append("0"); append("$hour:")
+    if (minute < 10) append("0"); append(minute)
 }
 
-
-fun Double.format(digits: Int = 2) = "%.${digits}f".format(Locale.US, this)
-
-fun Double.equalsDelta(other: Double) = kotlin.math.abs(this / other - 1) < 0.01
-
-fun Int.toTimeString(): String {
-    val hours = this / 60
-    val minutes = this - hours * 60
-    val hoursStr = if (hours < 10) "0$hours" else "$hours"
-    val minutesStr = if (minutes < 10) "0$minutes" else "$minutes"
-    return "$hoursStr:$minutesStr"
-}
-
-fun Int.toDayString(): String {
+fun isNextDay(hour: Int, minute: Int): Boolean {
     val calendar = Calendar.getInstance()
-    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    val minute = calendar.get(Calendar.MINUTE)
-    return if (hour * 60 + minute > this) "Завтра"
-    else "Сегодня"
+    val timeInMinutes = hour * 60 + minute
+    val currentTimeMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+    return timeInMinutes <= currentTimeMinutes
 }
 
-fun buildDaysString(
-    onMon: Boolean,
-    onTue: Boolean,
-    onWed: Boolean,
-    onThu: Boolean,
-    onFri: Boolean,
-    onSat: Boolean,
-    onSun: Boolean
-): String = buildString {
+fun Alarm.buildDaysString() = buildString {
     if (onMon) append("ПН, ")
     if (onTue) append("ВТ, ")
     if (onWed) append("СР, ")
@@ -57,4 +35,15 @@ fun buildDaysString(
     if (onSat) append("СБ, ")
     if (onSun) append("ВС, ")
     if (isNotEmpty()) delete(length - 2, length - 1)
+}
+
+fun Alarm.isRepeatingOnAnyDay(): Boolean {
+    return onMon or onTue or onWed or onThu or onFri or onSat or onSun
+}
+
+fun Alarm.setRepeatingOnAllDays(): Alarm {
+    return copy(
+        isRepeating = true, onMon = true, onTue = true, onWed = true,
+        onThu = true, onFri = true, onSat = true, onSun = true
+    )
 }

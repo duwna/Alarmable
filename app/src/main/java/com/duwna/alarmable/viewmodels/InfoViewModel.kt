@@ -1,12 +1,8 @@
 package com.duwna.alarmable.viewmodels
 
 import androidx.lifecycle.MutableLiveData
-import com.duwna.alarmable.App
-import com.duwna.alarmable.BuildConfig
-import com.duwna.alarmable.api.WeatherResponse
-import com.duwna.alarmable.api.WeatherService
-import com.duwna.alarmable.database.recipe.Recipe
-import com.duwna.alarmable.database.recipe.RecipeDao
+import com.duwna.alarmable.data.api.WeatherResponse
+import com.duwna.alarmable.data.database.recipe.Recipe
 import com.duwna.alarmable.repositories.InfoRepository
 import com.duwna.alarmable.utils.MockGenerator
 

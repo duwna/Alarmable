@@ -1,4 +1,4 @@
-package com.duwna.alarmable.database.recipe
+package com.duwna.alarmable.data.database.recipe
 
 import androidx.room.*
 

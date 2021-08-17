@@ -11,13 +11,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.duwna.alarmable.R
-import com.duwna.alarmable.api.WeatherResponse
-import com.duwna.alarmable.database.recipe.Recipe
+import com.duwna.alarmable.data.api.WeatherResponse
+import com.duwna.alarmable.data.database.recipe.Recipe
 import com.duwna.alarmable.databinding.ActivityInfoBinding
 import com.duwna.alarmable.ui.custom.UnorderedListSpan
 import com.duwna.alarmable.utils.*
@@ -63,9 +62,8 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
             }
         }
 
-
         ivRecipe.load(recipe.imgUrl) {
-            transformations(RoundedCornersTransformation(dpToPx(50)))
+            transformations(RoundedCornersTransformation(50f))
         }
 
         ivRecipe.setOnClickListener {

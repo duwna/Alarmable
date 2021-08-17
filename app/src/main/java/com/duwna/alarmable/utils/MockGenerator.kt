@@ -1,7 +1,7 @@
 package com.duwna.alarmable.utils
 
-import com.duwna.alarmable.database.alarm.Alarm
-import com.duwna.alarmable.database.recipe.Recipe
+import com.duwna.alarmable.data.database.alarm.Alarm
+import com.duwna.alarmable.data.database.recipe.Recipe
 import java.util.*
 
 object MockGenerator {
@@ -16,9 +16,11 @@ object MockGenerator {
         val r = Random()
         return Alarm(
             0,
-            (0..1440).random(),
+            (0..23).random(),
+            (0..60).random(),
             r.nextBoolean(),
-            "По умолчанию",
+            null,
+            r.nextBoolean(),
             r.nextBoolean(),
             r.nextBoolean(),
             r.nextBoolean(),

@@ -1,4 +1,4 @@
-package com.duwna.alarmable.api
+package com.duwna.alarmable.data.api
 
 import com.duwna.alarmable.BuildConfig
 import retrofit2.http.GET

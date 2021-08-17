@@ -74,6 +74,8 @@ class TaskActivity : AppCompatActivity() {
 
     private fun setupViews() = with(binding) {
 
+        btnStop.setOnClickListener { finish() }
+
         tvCount.setCharacterLists(TickerUtils.provideNumberList())
         tv0.setCharacterLists(TickerUtils.provideNumberList())
         tv1.setCharacterLists(TickerUtils.provideNumberList())

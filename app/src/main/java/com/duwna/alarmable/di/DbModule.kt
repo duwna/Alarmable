@@ -2,9 +2,9 @@ package com.duwna.alarmable.di
 
 import android.content.Context
 import androidx.room.Room
-import com.duwna.alarmable.database.AppDatabase
-import com.duwna.alarmable.database.alarm.AlarmDao
-import com.duwna.alarmable.database.recipe.RecipeDao
+import com.duwna.alarmable.data.database.AppDatabase
+import com.duwna.alarmable.data.database.alarm.AlarmDao
+import com.duwna.alarmable.data.database.recipe.RecipeDao
 import org.koin.dsl.module
 
 val dbModule = module {

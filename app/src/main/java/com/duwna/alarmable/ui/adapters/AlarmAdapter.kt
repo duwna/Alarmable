@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duwna.alarmable.R
-import com.duwna.alarmable.database.alarm.Alarm
+import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.databinding.ItemAlarmBinding
 import com.duwna.alarmable.utils.*
 
@@ -43,7 +43,7 @@ class AlarmsDiffCallback : DiffUtil.ItemCallback<Alarm>() {
         return oldItem == newItem
     }
 
-    override fun getChangePayload(oldItem: Alarm, newItem: Alarm): Any? {
+    override fun getChangePayload(oldItem: Alarm, newItem: Alarm): Any {
         return true
     }
 }
@@ -54,14 +54,15 @@ class AlarmViewHolder(
 
     fun bind(alarm: Alarm) = with(binding) {
 
-        tvTime.text = alarm.time.toTimeString()
+        tvTime.text = getTimeString(alarm.hour, alarm.minute)
 
-        tvDays.text = if (alarm.isRepeating) buildDaysString(
-            alarm.onMon, alarm.onTue, alarm.onWed, alarm.onThu,
-            alarm.onFri, alarm.onSat, alarm.onSun
-        ) else alarm.time.toDayString()
+        tvDays.text = when {
+            alarm.isRepeating -> alarm.buildDaysString()
+            isNextDay(alarm.hour, alarm.minute) -> "Завтра"
+            else -> "Сегодня"
+        }
 
-        tvMelody.text = alarm.melody
+        tvMelody.text = alarm.melody ?: "По умолчанию"
         checkboxHasTask.isChecked = alarm.hasTask
         switchActive.isChecked = alarm.isActive
 
@@ -88,9 +89,9 @@ class AlarmViewHolder(
         onMelodyClicked: (Alarm) -> Unit
     ) = with(binding) {
         switchActive.setOnClickListener { listener.onSwitchClicked(alarm) }
-        checkboxHasTask.setOnClickListener { listener.onTaskClicked(alarm) }
-        tvLabelDelete.setOnClickListener { listener.onDeleteClicked(alarm) }
-        checkboxRepeat.setOnClickListener { listener.onRepeatClicked(alarm) }
+        taskContainer.setOnClickListener { listener.onTaskClicked(alarm) }
+        deleteContainer.setOnClickListener { listener.onDeleteClicked(alarm) }
+        repeatContainer.setOnClickListener { listener.onRepeatClicked(alarm) }
         tvMonday.setOnClickListener { listener.onMonClicked(alarm) }
         tvTuesday.setOnClickListener { listener.onTueClicked(alarm) }
         tvWednesday.setOnClickListener { listener.onWedClicked(alarm) }
@@ -98,7 +99,7 @@ class AlarmViewHolder(
         tvFriday.setOnClickListener { listener.onFriClicked(alarm) }
         tvSaturday.setOnClickListener { listener.onSatClicked(alarm) }
         tvSunday.setOnClickListener { listener.onSunClicked(alarm) }
-        tvLabelMelody.setOnClickListener { onMelodyClicked(alarm) }
+        melodyContainer.setOnClickListener { onMelodyClicked(alarm) }
     }
 
 

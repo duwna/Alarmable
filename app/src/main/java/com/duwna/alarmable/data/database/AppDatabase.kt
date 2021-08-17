@@ -1,13 +1,13 @@
-package com.duwna.alarmable.database
+package com.duwna.alarmable.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.duwna.alarmable.BuildConfig
-import com.duwna.alarmable.database.AppDatabase.Companion.DATABASE_VERSION
-import com.duwna.alarmable.database.alarm.Alarm
-import com.duwna.alarmable.database.alarm.AlarmDao
-import com.duwna.alarmable.database.recipe.Recipe
-import com.duwna.alarmable.database.recipe.RecipeDao
+import com.duwna.alarmable.data.database.AppDatabase.Companion.DATABASE_VERSION
+import com.duwna.alarmable.data.database.alarm.Alarm
+import com.duwna.alarmable.data.database.alarm.AlarmDao
+import com.duwna.alarmable.data.database.recipe.Recipe
+import com.duwna.alarmable.data.database.recipe.RecipeDao
 
 @Database(version = DATABASE_VERSION, entities = [Alarm::class, Recipe::class])
 abstract class AppDatabase : RoomDatabase() {
@@ -18,7 +18,5 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun alarmDao(): AlarmDao
-
     abstract fun recipeDao(): RecipeDao
-
 }

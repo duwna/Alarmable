@@ -1,7 +1,7 @@
 package com.duwna.alarmable.di
 
 import com.duwna.alarmable.BuildConfig
-import com.duwna.alarmable.api.WeatherService
+import com.duwna.alarmable.data.api.WeatherService
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
