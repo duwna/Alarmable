@@ -18,8 +18,10 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.duwna.alarmable.R
 import com.duwna.alarmable.data.api.WeatherResponse
+import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.data.database.recipe.Recipe
 import com.duwna.alarmable.databinding.ActivityInfoBinding
+import com.duwna.alarmable.services.AlarmService
 import com.duwna.alarmable.ui.custom.UnorderedListSpan
 import com.duwna.alarmable.utils.*
 import com.duwna.alarmable.viewmodels.InfoViewModel
@@ -41,6 +43,11 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
     override fun onCreate(savedInstanceState: Bundle?) {
         showWhenLockedAndTurnScreenOn()
         super.onCreate(savedInstanceState)
+
+        val alarm = intent.getParcelableExtra<Alarm>(Alarm.KEY)
+        log(alarm)
+
+        stopService(Intent(this, AlarmService::class.java))
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

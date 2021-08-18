@@ -40,7 +40,7 @@
 
         <receiver android:name=".receivers.AlarmReceiver" />
         <service
-            android:name=".receivers.BackgroundSoundService"
+            android:name=".services.AlarmService"
             android:enabled="true" />
     </application>
 

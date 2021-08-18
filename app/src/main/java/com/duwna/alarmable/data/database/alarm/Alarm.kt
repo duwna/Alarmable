@@ -1,9 +1,12 @@
 package com.duwna.alarmable.data.database.alarm
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity
+@Parcelize
 data class Alarm(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
@@ -21,11 +24,12 @@ data class Alarm(
     val onFri: Boolean,
     val onSat: Boolean,
     val onSun: Boolean
-)
+) : Parcelable {
 
-
-
-
+    companion object {
+        const val KEY = "ALARM_KEY"
+    }
+}
 
 
 

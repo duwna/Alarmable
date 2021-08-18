@@ -20,7 +20,7 @@ class AlarmsController(
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             alarm.id,
-            Intent(context, AlarmReceiver::class.java).apply { putExtra("melody", alarm.melodyUri) },
+            Intent(context, AlarmReceiver::class.java).apply { putExtra(Alarm.KEY, alarm) },
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 

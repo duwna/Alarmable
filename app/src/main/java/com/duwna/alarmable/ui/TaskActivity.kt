@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
 import com.duwna.alarmable.databinding.ActivityTaskBinding
-import com.duwna.alarmable.receivers.BackgroundSoundService
+import com.duwna.alarmable.services.AlarmService
 import com.duwna.alarmable.utils.format
 import com.google.android.material.snackbar.Snackbar
 import com.robinhood.ticker.TickerUtils
@@ -119,9 +119,9 @@ class TaskActivity : AppCompatActivity() {
     }
 
     private fun finishQuiz() {
-        stopService(Intent(this, BackgroundSoundService::class.java))
-//        startActivity(Intent(this, MainActivity::class.java))
+        stopService(Intent(this, AlarmService::class.java))
         val taskActivityIntent = Intent(this, InfoActivity::class.java).apply {
+            putExtras(intent)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         startActivity(taskActivityIntent)
