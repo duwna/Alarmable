@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri =
                     result.data?.extras?.get(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?
-                setMelody(uri)
+                if (uri != null) setMelody(uri)
             }
         }
 
@@ -109,14 +109,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         storagePermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    private fun setMelody(uri: Uri?) {
-        uri?.let { returnUri ->
+    private fun setMelody(uri: Uri) {
+        uri.let { returnUri ->
             contentResolver.query(returnUri, null, null, null, null)
         }?.use { cursor ->
             val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             cursor.moveToFirst()
+
             val name = cursor.getString(nameIndex)
-            viewModel.setMelody(name)
+                .substringBefore(".")
+                .replace("_", " ")
+
+            viewModel.setMelody(name, uri.toString())
         }
     }
 

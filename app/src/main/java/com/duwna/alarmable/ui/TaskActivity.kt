@@ -1,11 +1,14 @@
 package com.duwna.alarmable.ui
 
-import android.media.MediaPlayer
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
 import com.duwna.alarmable.databinding.ActivityTaskBinding
+import com.duwna.alarmable.receivers.BackgroundSoundService
 import com.duwna.alarmable.utils.format
 import com.google.android.material.snackbar.Snackbar
 import com.robinhood.ticker.TickerUtils
@@ -22,15 +25,27 @@ class TaskActivity : AppCompatActivity() {
 
     private var answers = BooleanArray(4)
 
-    lateinit var mediaPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        showWhenLockedAndTurnScreenOn()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm).apply { start() }
         setupViews()
         resumeQuiz()
+    }
+
+
+    private fun showWhenLockedAndTurnScreenOn() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+        } else {
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            )
+        }
     }
 
 
@@ -74,7 +89,9 @@ class TaskActivity : AppCompatActivity() {
 
     private fun setupViews() = with(binding) {
 
-        btnStop.setOnClickListener { finish() }
+        btnStop.setOnClickListener {
+            finishQuiz()
+        }
 
         tvCount.setCharacterLists(TickerUtils.provideNumberList())
         tv0.setCharacterLists(TickerUtils.provideNumberList())
@@ -101,12 +118,17 @@ class TaskActivity : AppCompatActivity() {
         tvTime.text = Date().format("HH:mm")
     }
 
-    override fun onBackPressed() {
+    private fun finishQuiz() {
+        stopService(Intent(this, BackgroundSoundService::class.java))
+//        startActivity(Intent(this, MainActivity::class.java))
+        val taskActivityIntent = Intent(this, InfoActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        startActivity(taskActivityIntent)
+        finish()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer.stop()
+    override fun onBackPressed() {
     }
 }
 

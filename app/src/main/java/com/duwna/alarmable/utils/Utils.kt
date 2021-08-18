@@ -1,5 +1,6 @@
 package com.duwna.alarmable.utils
 
+import android.net.Uri
 import android.util.Log
 import com.duwna.alarmable.data.database.alarm.Alarm
 import java.text.SimpleDateFormat
@@ -46,4 +47,13 @@ fun Alarm.setRepeatingOnAllDays(): Alarm {
         isRepeating = true, onMon = true, onTue = true, onWed = true,
         onThu = true, onFri = true, onSat = true, onSun = true
     )
+}
+
+fun String?.uriOrNull(): Uri? {
+    this ?: return null
+    return try {
+        Uri.parse(this)
+    } catch (t: Throwable) {
+        null
+    }
 }

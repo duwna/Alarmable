@@ -6,33 +6,6 @@ import java.util.*
 
 object MockGenerator {
 
-    fun generateAlarmList(count: Int) = mutableListOf<Alarm>().apply {
-        repeat(count) {
-            add(generateAlarm())
-        }
-    }
-
-    fun generateAlarm(): Alarm {
-        val r = Random()
-        return Alarm(
-            0,
-            (0..23).random(),
-            (0..60).random(),
-            r.nextBoolean(),
-            null,
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean(),
-            r.nextBoolean()
-        )
-    }
-
-
     val recipes = listOf(
         Recipe(
             0,

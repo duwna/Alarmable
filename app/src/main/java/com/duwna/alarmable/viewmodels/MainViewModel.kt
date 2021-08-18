@@ -77,9 +77,9 @@ class MainViewModel(
         updateAlarm(newAlarm)
     }
 
-    fun setMelody(name: String) {
+    fun setMelody(name: String, uri: String) {
         if (pendingAlarm.value != null) {
-            updateAlarm(pendingAlarm.value!!.copy(melody = name))
+            updateAlarm(pendingAlarm.value!!.copy(melodyName = name, melodyUri = uri))
         }
     }
 

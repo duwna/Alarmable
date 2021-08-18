@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
@@ -16,9 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.InfoActivity" />
-        <activity android:name=".ui.TaskActivity" />
-        <activity android:name=".ui.MainActivity"
+
+        <activity android:name=".ui.InfoActivity"
+            android:launchMode="singleTop"
+            android:showOnLockScreen="true" />
+
+        <activity
+            android:noHistory="true"
+            android:name=".ui.TaskActivity"
+            android:launchMode="singleTop"
+            android:showOnLockScreen="true" />
+
+        <activity
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".receivers.AlarmReceiver"/>
+
+        <receiver android:name=".receivers.AlarmReceiver" />
+        <service
+            android:name=".receivers.BackgroundSoundService"
+            android:enabled="true" />
     </application>
 
 </manifest>

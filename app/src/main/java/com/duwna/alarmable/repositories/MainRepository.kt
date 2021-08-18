@@ -19,7 +19,8 @@ class MainRepository(
             hour = hour,
             minute = minute,
             isActive = true,
-            melody = null,
+            melodyName = null,
+            melodyUri = null,
             hasTask = false,
             isRepeating = false,
             onMon = false,
@@ -38,8 +39,8 @@ class MainRepository(
     suspend fun update(alarm: Alarm) {
         alarmsDao.update(alarm)
 
+        alarmsController.cancelAlarm(alarm.id)
         if (alarm.isActive) alarmsController.setAlarm(alarm)
-        else alarmsController.cancelAlarm(alarm.id)
     }
 
     suspend fun delete(alarm: Alarm) {

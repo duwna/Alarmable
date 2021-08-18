@@ -62,7 +62,7 @@ class AlarmViewHolder(
             else -> "Сегодня"
         }
 
-        tvMelody.text = alarm.melody ?: "По умолчанию"
+        tvMelody.text = alarm.melodyName ?: "По умолчанию"
         checkboxHasTask.isChecked = alarm.hasTask
         switchActive.isChecked = alarm.isActive
 
