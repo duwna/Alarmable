@@ -2,11 +2,12 @@ package com.duwna.alarmable.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import com.duwna.alarmable.data.api.WeatherResponse
+import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.data.database.recipe.Recipe
 import com.duwna.alarmable.repositories.InfoRepository
 import com.duwna.alarmable.utils.MockGenerator
 
-class InfoViewModel(private  val repository: InfoRepository) : BaseViewModel() {
+class InfoViewModel(private val repository: InfoRepository) : BaseViewModel() {
 
     val weather = MutableLiveData<WeatherResponse?>(null)
     val recipe = MutableLiveData<Recipe>()
@@ -32,4 +33,7 @@ class InfoViewModel(private  val repository: InfoRepository) : BaseViewModel() {
         MockGenerator.recipes.forEach { repository.insert(it) }
     }
 
+    fun cancelAlarm(alarm: Alarm) = launchSafety {
+        repository.cancelAlarmInDb(alarm)
+    }
 }

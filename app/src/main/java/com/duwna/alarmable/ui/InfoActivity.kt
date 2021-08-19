@@ -44,10 +44,13 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
         showWhenLockedAndTurnScreenOn()
         super.onCreate(savedInstanceState)
 
+        // update alarm after triggering
         val alarm = intent.getParcelableExtra<Alarm>(Alarm.KEY)
+        if (alarm != null) {
+            stopService(Intent(this, AlarmService::class.java))
+            viewModel.cancelAlarm(alarm)
+        }
         log(alarm)
-
-        stopService(Intent(this, AlarmService::class.java))
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

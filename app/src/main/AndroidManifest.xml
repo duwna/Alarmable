@@ -18,15 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.InfoActivity"
-            android:launchMode="singleTop"
-            android:showOnLockScreen="true" />
+        <activity
+            android:name=".ui.InfoActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:taskAffinity="" />
 
         <activity
-            android:noHistory="true"
             android:name=".ui.TaskActivity"
-            android:launchMode="singleTop"
-            android:showOnLockScreen="true" />
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:taskAffinity="" />
 
         <activity
             android:name=".ui.MainActivity"

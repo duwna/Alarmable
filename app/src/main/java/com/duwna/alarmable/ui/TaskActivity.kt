@@ -122,13 +122,11 @@ class TaskActivity : AppCompatActivity() {
         stopService(Intent(this, AlarmService::class.java))
         val taskActivityIntent = Intent(this, InfoActivity::class.java).apply {
             putExtras(intent)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         startActivity(taskActivityIntent)
         finish()
     }
 
-    override fun onBackPressed() {
-    }
+    override fun onBackPressed() {}
 }
 

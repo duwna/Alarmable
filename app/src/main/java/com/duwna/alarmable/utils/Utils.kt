@@ -57,3 +57,9 @@ fun String?.uriOrNull(): Uri? {
         null
     }
 }
+
+fun String.capitalize() = replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase(
+        Locale.getDefault()
+    ) else it.toString()
+}
