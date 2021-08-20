@@ -43,7 +43,7 @@ class MainViewModel(
         //TODO implement repeating alarms
         if (oldAlarm.isRepeating && !oldAlarm.isActive) {
             updateAlarm(oldAlarm.copy(isRepeating = false, isActive = !oldAlarm.isActive))
-            notify(Notify.Error("Repeating alarms are not implemented..."))
+            showSnackbar(SnackBarEvent.Error("Repeating alarms are not implemented..."))
             return
         }
 
@@ -70,7 +70,7 @@ class MainViewModel(
         //TODO implement repeating alarms
         if (newAlarm.isRepeating) {
             updateAlarm(newAlarm.copy(isActive = false))
-            notify(Notify.Error("Repeating alarms are not implemented..."))
+            showSnackbar(SnackBarEvent.Error("Repeating alarms are not implemented..."))
             return
         }
 

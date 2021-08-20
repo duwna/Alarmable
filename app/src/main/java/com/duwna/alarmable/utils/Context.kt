@@ -70,6 +70,3 @@ fun <T> Flow<T>.collectOnLifecycle(
 ) {
     lifecycleOwner.lifecycleScope.launchWhenStarted { collect { onChange(it) } }
 }
-
-const val PERMISSION_REQUEST_CODE = 200
-const val PICK_MELODY_CODE = 100

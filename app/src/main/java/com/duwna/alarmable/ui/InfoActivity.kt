@@ -1,15 +1,10 @@
 package com.duwna.alarmable.ui
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
@@ -25,18 +20,14 @@ import com.duwna.alarmable.services.AlarmService
 import com.duwna.alarmable.ui.custom.UnorderedListSpan
 import com.duwna.alarmable.utils.*
 import com.duwna.alarmable.viewmodels.InfoViewModel
-import com.duwna.alarmable.viewmodels.Notify
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.material.snackbar.Snackbar
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class InfoActivity : AppCompatActivity(R.layout.activity_info) {
+class InfoActivity : BaseActivity<InfoViewModel, ActivityInfoBinding>(R.layout.activity_info) {
 
-    private val binding: ActivityInfoBinding by viewBinding()
-    private val viewModel: InfoViewModel by viewModel()
+    override val binding: ActivityInfoBinding by viewBinding()
+    override val viewModel: InfoViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         showWhenLockedAndTurnScreenOn()
@@ -55,7 +46,6 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
     private fun subscribeOnState() {
         viewModel.weather.collectOnLifecycle(this) { bindWeather(it) }
         viewModel.recipe.collectOnLifecycle(this) { bindRecipe(it) }
-        viewModel.observeNotifications(this) { renderNotification(it) }
     }
 
     private fun bindRecipe(recipe: Recipe?) = with(binding) {
@@ -133,10 +123,6 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
                 else -> R.drawable.ic_weather_03d
             }
         )
-    }
-
-    private fun renderNotification(notify: Notify) {
-        Snackbar.make(binding.root, notify.message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun showWhenLockedAndTurnScreenOn() {

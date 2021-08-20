@@ -13,7 +13,6 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -22,16 +21,14 @@ import com.duwna.alarmable.databinding.ActivityMainBinding
 import com.duwna.alarmable.ui.adapters.AlarmAdapter
 import com.duwna.alarmable.utils.collectOnLifecycle
 import com.duwna.alarmable.viewmodels.MainViewModel
-import com.duwna.alarmable.viewmodels.Notify
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(R.layout.activity_main) {
 
-    private val binding: ActivityMainBinding by viewBinding()
-    private val viewModel: MainViewModel by viewModel()
+    override val binding: ActivityMainBinding by viewBinding()
+    override val viewModel: MainViewModel by viewModel()
 
     private val alarmAdapter: AlarmAdapter by lazy {
         AlarmAdapter(
@@ -93,9 +90,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             layoutManager = LinearLayoutManager(context)
             adapter = alarmAdapter
         }
-
-        viewModel.observeNotifications(this) { renderNotification(it) }
-
         binding.fab.setOnClickListener {
             showTimePickerDialog()
         }
@@ -118,15 +112,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
             viewModel.setMelody(name, uri.toString())
         }
-    }
-
-    private fun renderNotification(notify: Notify) {
-        val snackbar = Snackbar.make(binding.root, notify.message, Snackbar.LENGTH_SHORT)
-        if (notify is Notify.Error) snackbar.apply {
-            setBackgroundTint(getColor(R.color.design_default_color_error))
-            setTextColor(getColor(android.R.color.white))
-        }
-        snackbar.show()
     }
 
     private fun showTimePickerDialog() {
