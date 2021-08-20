@@ -47,10 +47,6 @@
             android:name=".services.AlarmService"
             android:enabled="true" />
 
-        <service
-            android:name=".services.TestService"
-            android:enabled="true" />
-
     </application>
 
 </manifest>

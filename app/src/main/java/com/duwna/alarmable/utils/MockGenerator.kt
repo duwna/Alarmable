@@ -1,8 +1,6 @@
 package com.duwna.alarmable.utils
 
-import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.data.database.recipe.Recipe
-import java.util.*
 
 object MockGenerator {
 

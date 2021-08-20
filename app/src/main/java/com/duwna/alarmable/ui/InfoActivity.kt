@@ -9,8 +9,9 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
-import coil.load
-import coil.transform.RoundedCornersTransformation
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.duwna.alarmable.R
 import com.duwna.alarmable.data.api.WeatherResponse
 import com.duwna.alarmable.data.database.alarm.Alarm
@@ -20,8 +21,8 @@ import com.duwna.alarmable.services.AlarmService
 import com.duwna.alarmable.ui.custom.UnorderedListSpan
 import com.duwna.alarmable.utils.*
 import com.duwna.alarmable.viewmodels.InfoViewModel
-import java.util.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 
 class InfoActivity : BaseActivity<InfoViewModel, ActivityInfoBinding>(R.layout.activity_info) {
@@ -60,9 +61,9 @@ class InfoActivity : BaseActivity<InfoViewModel, ActivityInfoBinding>(R.layout.a
             }
         }
 
-        ivRecipe.load(recipe.imgUrl) {
-            transformations(RoundedCornersTransformation(50f))
-        }
+        Glide.with(this@InfoActivity).load(recipe.imgUrl)
+            .apply(RequestOptions().transform(RoundedCorners(50)))
+            .into(ivRecipe)
 
         ivRecipe.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(recipe.url)))

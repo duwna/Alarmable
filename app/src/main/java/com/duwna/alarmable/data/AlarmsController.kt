@@ -24,9 +24,10 @@ class AlarmsController(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val triggerTimeTest = Calendar.getInstance().apply {
-            add(Calendar.SECOND, 3)
-        }.timeInMillis
+//        Trigger time for testing
+//        val triggerTimeTest = Calendar.getInstance().apply {
+//            add(Calendar.SECOND, 3)
+//        }.timeInMillis
 
         val triggerTime = getTriggerTimeMillis(alarm.hour, alarm.minute)
 
@@ -34,7 +35,7 @@ class AlarmsController(
 
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
-            triggerTimeTest,
+            triggerTime,
             pendingIntent
         )
     }
