@@ -21,7 +21,7 @@ class PrefManager(context: Context) {
         }
     }
 
-    suspend fun getLocation(): City? {
+    suspend fun loadLocation(): City? {
         val prefs = dataStore.data.first()
         return City(
             prefs[Keys.ID_CITY_KEY] ?: return null,
@@ -29,9 +29,21 @@ class PrefManager(context: Context) {
         )
     }
 
+    suspend fun saveDifficulty(difficulty: Int) {
+        dataStore.edit { prefs ->
+            prefs[Keys.DIFFICULTY_KEY] = difficulty
+        }
+    }
+
+    suspend fun loadDifficulty(): Int {
+        val prefs = dataStore.data.first()
+        return prefs[Keys.DIFFICULTY_KEY] ?: 500
+    }
+
     private object Keys {
         val ID_CITY_KEY = intPreferencesKey("id")
         val NAME_CITY_KEY = stringPreferencesKey("name")
+        val DIFFICULTY_KEY = intPreferencesKey("difficulty")
     }
 
 }

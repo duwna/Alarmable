@@ -28,7 +28,7 @@ class InfoRepository(
         alarmDao.update(alarm.copy(isActive = false))
     }
 
-    suspend fun getCity() = prefs.getLocation() ?: City(498817, "")
+    suspend fun getCity() = prefs.loadLocation() ?: City(498817, "")
 
     suspend fun loadWeather(): WeatherResponse {
         return api.getWeatherByCityId(getCity().id)

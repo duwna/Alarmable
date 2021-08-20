@@ -9,7 +9,6 @@ import com.duwna.alarmable.data.database.recipe.RecipeDao
 import org.koin.dsl.module
 
 val dbModule = module {
-    single { providePrefManager(get()) }
     single { provideDatabase(get()) }
     single { provideAlarmDao(get()) }
     single { provideRecipeDao(get()) }
@@ -24,7 +23,3 @@ private fun provideDatabase(context: Context): AppDatabase = Room.databaseBuilde
 private fun provideAlarmDao(appDatabase: AppDatabase): AlarmDao = appDatabase.alarmDao()
 
 private fun provideRecipeDao(appDatabase: AppDatabase): RecipeDao = appDatabase.recipeDao()
-
-private fun providePrefManager(context: Context): PrefManager {
-    return PrefManager(context)
-}
