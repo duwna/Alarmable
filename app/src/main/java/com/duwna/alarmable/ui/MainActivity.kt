@@ -21,7 +21,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
 import com.duwna.alarmable.databinding.ActivityMainBinding
 import com.duwna.alarmable.ui.adapters.AlarmAdapter
-import com.duwna.alarmable.utils.log
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
@@ -157,6 +156,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
             R.id.info -> {
                 startActivity(Intent(this, InfoActivity::class.java))
+                true
+            }
+            R.id.settings -> {
+                ChooseCityDialog().show(supportFragmentManager, "ChooseCityDialog")
                 true
             }
             else -> super.onOptionsItemSelected(item)

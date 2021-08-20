@@ -11,6 +11,11 @@ data class WeatherResponse(
     val id: Int
 )
 
+data class City(
+    val id: Int,
+    val name: String
+)
+
 data class Weather(
     val id: Int,
     val main: String,
@@ -42,5 +47,4 @@ data class Sys(
     val sunrise: Long,
     val sunset: Long
 )
-
 

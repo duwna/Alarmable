@@ -66,12 +66,16 @@ dependencies {
     implementation "androidx.room:room-ktx:2.3.0"
     kapt "androidx.room:room-compiler:2.3.0"
 
+    // DataStore
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+
     //ticker
     implementation 'com.robinhood.ticker:ticker:2.0.2'
 
-    //Retrofit
+    //Network
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
 
     //Location
     implementation "com.google.android.gms:play-services-location:18.0.0"

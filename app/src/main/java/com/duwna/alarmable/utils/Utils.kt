@@ -63,3 +63,9 @@ fun String.capitalize() = replaceFirstChar {
         Locale.getDefault()
     ) else it.toString()
 }
+
+suspend fun <T> tryOrNull(block: suspend () -> T?): T? = try {
+    block()
+} catch (t: Throwable) {
+    null
+}

@@ -1,21 +1,19 @@
 package com.duwna.alarmable.utils
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.database.Cursor
-import android.net.Uri
-import android.provider.OpenableColumns
 import android.text.Layout
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.AttrRes
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 
 
 fun Context.dpToPx(dp: Int): Float {
@@ -64,6 +62,13 @@ fun Layout.getLineBottomWithoutSpacing(line: Int): Int {
     } else {
         lineBottom - spacingAdd.toInt()
     }
+}
+
+fun <T> Flow<T>.collectOnLifecycle(
+    lifecycleOwner: LifecycleOwner,
+    onChange: (T) -> Unit
+) {
+    lifecycleOwner.lifecycleScope.launchWhenStarted { collect { onChange(it) } }
 }
 
 const val PERMISSION_REQUEST_CODE = 200

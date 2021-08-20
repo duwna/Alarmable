@@ -19,7 +19,7 @@ class InfoViewModel(private val repository: InfoRepository) : BaseViewModel() {
     fun loadWeather(lat: Double, lon: Double) = launchSafety {
 
         val weatherResponse = repository
-            .getWeatherByCoordsAsync(lat, lon, "ru")
+            .getWeatherByCoords(lat, lon)
 
         weather.postValue(weatherResponse)
     }

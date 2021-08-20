@@ -15,10 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.res.ResourcesCompat
+import com.duwna.alarmable.BuildConfig
 import com.duwna.alarmable.R
 import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.ui.InfoActivity
 import com.duwna.alarmable.ui.TaskActivity
+import com.duwna.alarmable.utils.log
 import com.duwna.alarmable.utils.uriOrNull
 
 class AlarmService : Service() {
@@ -103,7 +105,7 @@ class AlarmService : Service() {
     override fun onLowMemory() {}
 
     private companion object {
-        private const val CHANNEL_ID = "com.duwna.alarmable.alarms"
+        private const val CHANNEL_ID = "${BuildConfig.APPLICATION_ID}.alarms"
         private const val CHANNEL_NAME = "alarms"
     }
 }
