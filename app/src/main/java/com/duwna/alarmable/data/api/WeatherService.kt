@@ -11,6 +11,11 @@ interface WeatherService {
     ): WeatherResponse
 
     @GET("data/2.5/weather")
+    suspend fun getWeatherByCityId(
+        @Query("id") id: Int,
+    ): WeatherResponse
+
+    @GET("data/2.5/weather")
     suspend fun getCityByName(
         @Query("q") name: String,
     ): City

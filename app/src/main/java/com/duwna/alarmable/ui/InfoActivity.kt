@@ -38,8 +38,6 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
     private val binding: ActivityInfoBinding by viewBinding()
     private val viewModel: InfoViewModel by viewModel()
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     override fun onCreate(savedInstanceState: Bundle?) {
         showWhenLockedAndTurnScreenOn()
         super.onCreate(savedInstanceState)
@@ -50,19 +48,18 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
         if (alarm != null) viewModel.cancelAlarm(alarm)
         log(alarm)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        if (isPermitted()) loadLocation()
-        else request()
-
-        viewModel.weather.observe(this, { bindWeather(it) })
-        viewModel.recipe.observe(this, { bindRecipe(it) })
-        viewModel.observeNotifications(this) { renderNotification(it) }
-
+        subscribeOnState()
         binding.btnOtherRecipe.setOnClickListener { viewModel.loadRecipe() }
     }
 
-    private fun bindRecipe(recipe: Recipe) = with(binding) {
+    private fun subscribeOnState() {
+        viewModel.weather.collectOnLifecycle(this) { bindWeather(it) }
+        viewModel.recipe.collectOnLifecycle(this) { bindRecipe(it) }
+        viewModel.observeNotifications(this) { renderNotification(it) }
+    }
+
+    private fun bindRecipe(recipe: Recipe?) = with(binding) {
+        recipe ?: return@with
 
         tvRecipeName.text = recipe.name
         tvRecipeDescription.text = recipe.description
@@ -118,21 +115,6 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun loadLocation() {
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                viewModel.loadWeather(location.latitude, location.longitude)
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    "Не удалось получить последнее местоположение",
-                    Snackbar.LENGTH_LONG
-                ).show()
-                viewModel.loadWeather(30.0, 60.0)
-            }
-        }
-    }
 
     private fun setWeatherIcon(icon: String) {
         binding.ivWeatherIcon.setImageResource(
@@ -153,45 +135,8 @@ class InfoActivity : AppCompatActivity(R.layout.activity_info) {
         )
     }
 
-    private fun isPermitted(): Boolean = ActivityCompat
-        .checkSelfPermission(
-            this, Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-    private fun request() {
-        requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            PERMISSION_REQUEST_CODE
-        )
-    }
-
     private fun renderNotification(notify: Notify) {
         Snackbar.make(binding.root, notify.message, Snackbar.LENGTH_LONG).show()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PERMISSION_REQUEST_CODE -> {
-                if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                ) {
-                    loadLocation()
-                } else {
-                    Snackbar.make(
-                        binding.root,
-                        "Для просмотра погоды необходимо дать разрешение на определения города",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                return
-            }
-            else -> {
-            }
-        }
     }
 
     private fun showWhenLockedAndTurnScreenOn() {

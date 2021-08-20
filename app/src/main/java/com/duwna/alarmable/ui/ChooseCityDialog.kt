@@ -108,6 +108,7 @@ class ChooseCityDialog : DialogFragment(R.layout.dialog_choose_city) {
                 }
                 startActivity(intent)
             }
+            .setNegativeButton("Поиск") { _, _ -> viewModel.toggleSearchMode() }
             .show()
     }
 

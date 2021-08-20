@@ -15,7 +15,6 @@ class InfoRepository(
     private val alarmDao: AlarmDao,
     private val prefs: PrefManager
 ) {
-
     suspend fun getWeatherByCoords(
         lat: Double,
         lon: Double,
@@ -29,5 +28,9 @@ class InfoRepository(
         alarmDao.update(alarm.copy(isActive = false))
     }
 
-//    suspend fun getCity() = prefs.getLocation() ?: City()
+    suspend fun getCity() = prefs.getLocation() ?: City(498817, "")
+
+    suspend fun loadWeather(): WeatherResponse {
+        return api.getWeatherByCityId(getCity().id)
+    }
 }

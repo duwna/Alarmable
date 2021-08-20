@@ -15,16 +15,15 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.duwna.alarmable.R
 import com.duwna.alarmable.databinding.ActivityMainBinding
 import com.duwna.alarmable.ui.adapters.AlarmAdapter
+import com.duwna.alarmable.utils.collectOnLifecycle
 import com.duwna.alarmable.viewmodels.MainViewModel
 import com.duwna.alarmable.viewmodels.Notify
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -83,11 +82,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun subscribeOnState() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.alarms.collect { alarms ->
-                binding.tvNoAlarms.isVisible = alarms.isEmpty()
-                alarmAdapter.submitList(alarms)
-            }
+        viewModel.alarms.collectOnLifecycle(this) { alarms ->
+            binding.tvNoAlarms.isVisible = alarms.isEmpty()
+            alarmAdapter.submitList(alarms)
         }
     }
 

@@ -1,32 +1,29 @@
 package com.duwna.alarmable.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import com.duwna.alarmable.data.api.WeatherResponse
 import com.duwna.alarmable.data.database.alarm.Alarm
 import com.duwna.alarmable.data.database.recipe.Recipe
 import com.duwna.alarmable.repositories.InfoRepository
 import com.duwna.alarmable.utils.MockGenerator
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class InfoViewModel(private val repository: InfoRepository) : BaseViewModel() {
 
-    val weather = MutableLiveData<WeatherResponse?>(null)
-    val recipe = MutableLiveData<Recipe>()
+    val weather = MutableStateFlow<WeatherResponse?>(null)
+    val recipe = MutableStateFlow<Recipe?>(null)
 
     init {
         loadRecipe()
-    }
-
-    fun loadWeather(lat: Double, lon: Double) = launchSafety {
-
-        val weatherResponse = repository
-            .getWeatherByCoords(lat, lon)
-
-        weather.postValue(weatherResponse)
+        loadWeather()
     }
 
     fun loadRecipe() = launchSafety {
         if (repository.getRandom() == null) prePopulate()
-        recipe.postValue(repository.getRandom())
+        recipe.value = repository.getRandom()
+    }
+
+    private fun loadWeather() = launchSafety {
+        weather.value = repository.loadWeather()
     }
 
     private suspend fun prePopulate() {
